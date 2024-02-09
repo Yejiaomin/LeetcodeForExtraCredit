@@ -1,6 +1,6 @@
-Leetcode Problem: 39. Combination Sum
+Leetcode Problem: 39. Combination Sum (Medium)
 Link: https://leetcode.com/problems/combination-sum/description/
-Medium
+
 Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order.
 
 The same number may be chosen from candidates an unlimited number of times. Two combinations are unique if the 
@@ -19,3 +19,75 @@ Explanation:
 2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times.
 7 is a candidate, and 7 = 7.
 These are the only two combinations.
+
+class Solution {
+    //Global variables: 'output' to store all valid combinations, and 'path' to represent the current combination being built.
+    List<List<Integer>> output = new ArrayList<>();
+    List<Integer> path = new ArrayList<>();
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        //Sorting the given array of cadidates.
+        Arrays.sort(candidates);
+        hepler(candidates, target, 0);
+        return output;
+    }
+    //Helper method to taverse and find all valid combainations.
+    public void hepler(int[] candidates, int target, int startIndex) {
+        //No need to keep going with this path if the current target is negative.
+        if(target < 0){
+            return;
+        }
+        //Find a valid combaination, add it to the output list.
+        if(target == 0){
+            output.add(new ArrayList(path));
+            return;
+        }
+        //Loop through all the cadidates.
+        for(int i = startIndex; i < candidates.length && candidates[i] <= target ; i++){
+            //Add the current cadidate to the path.
+            path.add(candidates[i]);
+            //Recursively call the helper method to go to a deeper level, 
+            //Target changes to minus the last cadidate. and startindex is the current index.
+            hepler(candidates, target - candidates[i] , i);
+            //Remove the last cadidate before going back.
+            path.remove(path.size() - 1);
+        }
+    }
+}
+
+
+Leetcode Problem: 78. Subsets (Medium)
+Link: https://leetcode.com/problems/subsets/description/
+Given an integer array nums of unique elements, return all possible subsets(the power set).
+
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+ 
+Example 1:
+
+Input: nums = [1,2,3]
+Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+
+class Solution {
+    // Global variables: 'ouput' to store the valid combainations,'path' to represent the current combination being built in.
+    List<List<Integer>> output = new ArrayList<>();
+    List<Integer> path = new ArrayList<>();
+    public List<List<Integer>> subsets(int[] nums) {
+        helper(nums, 0);
+        return output;
+    }
+    // Helper method to traverse and find all valid combinations
+    public void helper(int[] nums, int startIndex) {
+        //Every path is a valid combination, so add every path to the output.
+        output.add(new ArrayList<>(path));
+        //Loop through all the numbers.
+        for(int i = startIndex; i < nums.length; i++){
+            //Add every number to the path.
+            path.add(nums[i]);
+            //Call the helper method to go to a deeper level.
+            //startIndex become the current index + 1;becuse we don't allow repeating.
+            helper(nums, i + 1);
+            // Remove the last number of the current path before going back.
+            path.remove(path.size() - 1);
+        }
+    }
+}
