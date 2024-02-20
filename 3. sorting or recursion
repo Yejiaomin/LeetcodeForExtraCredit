@@ -1,1 +1,69 @@
+Leetcode Problem: 538. Convert BST to Greater Tree (Medium)
+Link: https://leetcode.com/problems/convert-bst-to-greater-tree/description/
+
+Given the root of a Binary Search Tree (BST), convert it to a Greater Tree such that every key of the original BST is changed to the original key plus the sum of all keys greater than the original key in BST.
+
+As a reminder, a binary search tree is a tree that satisfies these constraints:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and right subtrees must also be binary search trees.
+
+Example 1:
+Input: root = [4,1,6,0,2,5,7,null,null,null,3,null,null,null,8]
+Output: [30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]
+
+class Solution {
+    // Global variale used to caculate the sum.
+    int sum = 0;
+    public TreeNode convertBST(TreeNode root) {
+        traversal(root);
+        return root;
+    }
+// Recursive function used to traverse the whole tree and update each node's value with the accumulated sum.
+    public void traversal(TreeNode root){
+        if(root == null) return;
+        //Traverse right, 
+        traversal(root.right);
+        //Adding the right value to sum, and updating the currente root value as sum. 
+        sum += root.val;
+        root.val = sum;
+        // Traverse left.
+        traversal(root.left);
+    }
+}
+
+Leetcode Problem: 230. Kth Smallest Element in a BST
+Link: https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+
+Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree.
+
+Input: root = [5,3,6,2,4,null,null,1], k = 3
+Output: 3
+
+class Solution {
+    //  Global variables: ans is used to record the target root.val, count is used to check whether it reaches k or not.
+    int ans = 0;
+    int count = 0;
+    public int kthSmallest(TreeNode root, int k) {
+        traversal(root,k);
+        return ans;
+    }
+
+    // Recursive funtion used to traverse the whole tree.
+    public void traversal(TreeNode root, int k){
+        if(root == null) return;
+        // Traverse left because  the left noed is less than the root, and root is less than the right.
+        traversal(root.left, k);
+        // Increment count to record how many smaller values we encountered.
+        count++;
+       // When k equals count, it means we find the target node.
+        if(k == count){
+            ans = root.val;
+            return;
+        }   
+        // traverse right.
+        traversal(root.right, k);        
+    }  
+}
 
